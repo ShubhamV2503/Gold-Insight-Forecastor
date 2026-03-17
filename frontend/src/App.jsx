@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart, ReferenceLine
 } from 'recharts';
-import { TrendingUp, Calendar, AlertCircle, Download, Activity, Target, ShieldCheck, Github, ExternalLink, RefreshCw } from 'lucide-react';
+import { TrendingUp, Calendar, AlertCircle, Download, Activity, Target, ShieldCheck, Github, ExternalLink, RefreshCw, Book, Info, Cpu, Zap } from 'lucide-react';
 import axios from 'axios';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -129,6 +129,9 @@ const App = () => {
         <button className={`nav-tab ${view === 'forecast' ? 'active' : ''}`} onClick={() => setView('forecast')}>
           Forecast Engine
         </button>
+        <button className={`nav-tab ${view === 'guide' ? 'active' : ''}`} onClick={() => setView('guide')}>
+          Platform Guide
+        </button>
       </div>
 
       {view === 'dashboard' ? (
@@ -185,8 +188,9 @@ const App = () => {
             </div>
           </div>
         </div>
-      ) : (
+      ) : view === 'forecast' ? (
         <div className="animate-fade">
+          {/* ... existing forecast view content ... */}
           <div className="metric-grid">
             <div className="glass-card" style={{ borderLeft: '4px solid var(--primary)' }}>
               <span className="metric-label"><Target size={16} /> Model Reliability</span>
@@ -283,8 +287,81 @@ const App = () => {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-            <p style={{ marginTop: '1.5rem', color: 'var(--text-dim)', fontSize: '0.85rem', textAlign: 'center', fontStyle: 'italic' }}>
-              💡 Pro Tip: Click any point on the chart to pin details to the "Selected Target" card above.
+          </div>
+        </div>
+      ) : (
+        <div className="animate-fade" style={{ display: 'grid', gap: '2rem' }}>
+          <div className="glass-card" style={{ padding: '2.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+              <div style={{ padding: '0.75rem', background: 'rgba(251, 191, 36, 0.1)', borderRadius: '1rem' }}>
+                <Info color="var(--primary)" size={32} />
+              </div>
+              <h2>About Aurea Platform</h2>
+            </div>
+            <p style={{ color: 'var(--text-main)', fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '1.5rem' }}>
+              Aurea is an elite financial intelligence engine designed to decipher Gold market (XAUUSD) volatility. 
+              By merging five years of historical data with high-dimension time-series models, we provide institutional-grade 
+              forecasting for retail and professional traders alike.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>
+              <div style={{ padding: '1.5rem', background: 'var(--bg-glass)', borderRadius: '1.5rem', border: '1px solid var(--border)' }}>
+                <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', marginBottom: '1rem' }}><Cpu size={20} /> Optimized SARIMAX</h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>Captures long-term drift and seasonal patterns using auto-regressive moving averages enhanced with linear trend components.</p>
+              </div>
+              <div style={{ padding: '1.5rem', background: 'var(--bg-glass)', borderRadius: '1.5rem', border: '1px solid var(--border)' }}>
+                <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent)', marginBottom: '1rem' }}><Zap size={20} /> Meta Prophet</h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>A robust additive model forecasting non-linear trends with yearly, weekly, and daily seasonality, plus holiday effects.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '2.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+              <div style={{ padding: '0.75rem', background: 'rgba(56, 189, 248, 0.1)', borderRadius: '1rem' }}>
+                <Book color="var(--accent)" size={32} />
+              </div>
+              <h2>How to Use the Intelligence</h2>
+            </div>
+            <div className="guide-steps" style={{ display: 'grid', gap: '1.5rem' }}>
+              <div style={{ display: 'flex', gap: '1.5rem' }}>
+                <div style={{ minWidth: '32px', height: '32px', background: 'var(--primary)', color: 'var(--bg-main)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>1</div>
+                <div>
+                  <h4 style={{ marginBottom: '0.25rem' }}>Explore the Market Data</h4>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>Use the <strong>Market Dashboard</strong> to analyze the last 5 years of gold price action. This table is fed directly from the Yahoo Finance live API via our BigQuery pipeline.</p>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '1.5rem' }}>
+                <div style={{ minWidth: '32px', height: '32px', background: 'var(--primary)', color: 'var(--bg-main)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>2</div>
+                <div>
+                  <h4 style={{ marginBottom: '0.25rem' }}>Generate Dynamic Projections</h4>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>Switch to the <strong>Forecast Engine</strong>. You can click any point on the 1-Year predictive chart to "pin" that date's specific metrics to the details card.</p>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '1.5rem' }}>
+                <div style={{ minWidth: '32px', height: '32px', background: 'var(--primary)', color: 'var(--bg-main)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>3</div>
+                <div>
+                  <h4 style={{ marginBottom: '0.25rem' }}>Custom Date Prediction</h4>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>Use the <strong>Temporal Projection</strong> tool to type in any future date (even years ahead). The engine will crunch the numbers and provide a specific price prediction with confidence intervals.</p>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '1.5rem' }}>
+                <div style={{ minWidth: '32px', height: '32px', background: 'var(--primary)', color: 'var(--bg-main)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>4</div>
+                <div>
+                  <h4 style={{ marginBottom: '0.25rem' }}>Export & Analyze</h4>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>Click <strong>Export Dataset</strong> at any time to download the current view's raw data in CSV format for further analysis in Excel or Python.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '2.5rem', border: '1px solid var(--success)' }}>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--success)', marginBottom: '1rem' }}>
+              <ShieldCheck size={20} /> Autonomous Reliability (MLOps)
+            </h3>
+            <p style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: '1.6' }}>
+              Unlike static dashboards, Aurea is <strong>alive</strong>. Every week, our background scheduler fetches fresh data and retrains every model. 
+              The system only promotes a new model to production if it beats the previous version's accuracy (MAPE), ensuring a 
+              perpetual evolution of intelligence.
             </p>
           </div>
         </div>
