@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import pickle
@@ -7,6 +7,7 @@ from datetime import datetime
 from database import get_historical_data, get_forecast_data, get_model_metrics
 
 app = FastAPI(title="Gold Price Forecasting API")
+api_router = APIRouter(prefix="/api")
 
 # Enable CORS
 app.add_middleware(
@@ -19,7 +20,7 @@ app.add_middleware(
 
 MODEL_DIR = "/app/ml"
 
-@app.get("/historical-data")
+@api_router.get("/historical-data")
 async def historical_data():
     try:
         data = get_historical_data()
@@ -27,7 +28,7 @@ async def historical_data():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/forecast")
+@api_router.get("/forecast")
 async def forecast(model: str = Query(None)):
     try:
         data = get_forecast_data(model)
@@ -35,7 +36,7 @@ async def forecast(model: str = Query(None)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/metrics")
+@api_router.get("/metrics")
 async def metrics():
     try:
         data = get_model_metrics()
@@ -43,7 +44,7 @@ async def metrics():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/predict-date")
+@api_router.get("/predict-date")
 async def predict_date(
     target_date: str = Query(..., description="Date in YYYY-MM-DD format"),
     model_name: str = Query("SARIMAX", description="Model to use (SARIMAX or Prophet)")
@@ -60,7 +61,6 @@ async def predict_date(
             
         target_dt = pd.to_datetime(target_date).tz_localize(None)
         
-        # Get latest MAPE for context
         all_metrics = get_model_metrics()
         metric_key = f"{model_name}_MAPE"
         mape = next((m['metric_value'] for m in all_metrics if m['metric_name'] == metric_key), 0)
@@ -74,8 +74,6 @@ async def predict_date(
             summary = forecast.summary_frame().iloc[-1]
             pred, lower, upper = summary['mean'], summary['mean_ci_lower'], summary['mean_ci_upper']
         else:
-            # Prophet
-            # Check if target_dt is in the future relative to model history
             last_date = model.history['ds'].max()
             if target_dt <= last_date:
                 return {"date": target_date, "prediction": None, "error": "Please select a future date."}
@@ -89,12 +87,13 @@ async def predict_date(
             "prediction": pred,
             "lower_bound": lower,
             "upper_bound": upper,
-            "mape": mape,
             "model_used": model_name
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/health")
+@api_router.get("/health")
 async def health():
     return {"status": "healthy"}
+
+app.include_router(api_router)
