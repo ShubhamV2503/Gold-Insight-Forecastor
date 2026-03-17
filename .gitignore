@@ -1,0 +1,31 @@
+# Credentials & Security
+credentials.json
+.env
+*.pkl
+google_credentials_json.json
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Virtual Environments
+venv/
+.env/
+env/
+
+# Build & System
+dist/
+build/
+.vercel
+.next/
+out/
+.DS_Store
+
+# Large Files
+automation/
+ml/sarimax_model.pkl
+ml/prophet_model.pkl
+backend/ml/sarimax_model.pkl
+backend/ml/prophet_model.pkl

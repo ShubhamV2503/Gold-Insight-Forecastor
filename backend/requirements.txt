@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+google-cloud-bigquery
+pandas
+python-dotenv
+db-dtypes
+statsmodels
+numpy
+prophet
