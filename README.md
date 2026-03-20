@@ -1,3 +1,11 @@
+---
+title: Gold Price Forecaster
+emoji: 🥇
+colorFrom: yellow
+colorTo: gray
+sdk: docker
+pinned: false
+---
 # Aurea Intelligence: Autonomous Gold Forecasting Platform 🥇📈
 
 **Aurea** is a professional-grade financial intelligence engine designed to predict Gold market (XAUUSD) volatility. It combines five years of institutional data with a self-improving ML pipeline to provide high-precision predictive insights.
